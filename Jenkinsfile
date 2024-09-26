@@ -11,14 +11,14 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                git([url: 'https://github.com/shovalaharoni99/k8s-project1/tree/master/consumer', branch: 'master'])
+                git([url: 'https://github.com/shovalaharoni99/k8s-project1', branch: 'master'])
             }
         }
  
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build "${imagename}:latest"
+                    dockerImage = docker.build("${imagename}:latest" , "consumer/")
                 }
             }
         }
