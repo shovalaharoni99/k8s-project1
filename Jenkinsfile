@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                git([url: 'https://github.com/shovalaharoni99/k8s-project1/tree/master/consumer', branch: 'main'])
+                git([url: 'https://github.com/shovalaharoni99/k8s-project1/tree/master/consumer', branch: 'master'])
             }
         }
  
