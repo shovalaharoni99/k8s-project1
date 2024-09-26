@@ -54,16 +54,11 @@ pipeline {
                 }
             }
         }
-    }
-
-    environment {
-        imagename = "315234377/producer"
-    }
-
-    stages {
-        stage('Cloning Git') {
+    
+    
+        stage('change image') {
             steps {
-                git([url: 'https://github.com/shovalaharoni99/k8s-project1', branch: 'master'])
+              imagename = "315234377/producer"
             }
         }
  
@@ -106,5 +101,11 @@ pipeline {
                 }
             }
         }
+    
+    
     }
+
+    
+
+    
 }
