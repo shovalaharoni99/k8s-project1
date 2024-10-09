@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.consumer.name | default "consumer" }}
+  labels:
+    {{- with .Values.consumer.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.consumer.replicaCount }}
+  selector:
+    matchLabels:
+      {{- with .Values.consumer.selectorLabels}}
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+  template:
+    metadata:
+      {{- with .Values.consumer.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- with .Values.consumer.podLabels  }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.consumer.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.consumer.name  | default "consumer" }}
+          image: "{{ .Values.consumer.image.repository }}:{{ .Values.consumer.image.tag | default "315234377/consumer:latest" }}"
+          imagePullPolicy: {{ .Values.consumer.image.pullPolicy }}
+          {{- if .Values.consumer.commandToExe }}
+          command: [{{- range .Values.consumer.commandToExe }} "{{ . }}", {{- end }}]
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.consumer.service.port }}
+              protocol: TCP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.producer.name | default "producer" }}
+  labels:
+    {{- with .Values.producer.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.producer.replicaCount }}
+  selector:
+    matchLabels:
+      {{- with .Values.producer.selectorLabels}}
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+  template:
+    metadata:
+      {{- with .Values.producer.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- with .Values.producer.podLabels  }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.producer.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.producer.name  | default "producer" }}
+          image: "{{ .Values.producer.image.repository }}:{{ .Values.producer.image.tag | default "315234377/producer:latest" }}"
+          imagePullPolicy: {{ .Values.producer.image.pullPolicy }}
+          {{- if .Values.producer.commandToExe }}
+          command: [{{- range .Values.producer.commandToExe }} "{{ . }}", {{- end }}]
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.producer.service.port }}
+              protocol: TCP
+          
+      

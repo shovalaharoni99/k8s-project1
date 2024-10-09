@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.consumer.name | default "consumer" }}
+  labels:
+    {{- with .Values.consumer.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ports:
+    - port: {{ .Values.consumer.service.port }}
+      targetPort: {{ .Values.consumer.service.tartgetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- with .Values.consumer.selectorLabels}}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.producer.name | default "producer" }}
+  labels:
+    {{- with .Values.producer.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ports:
+    - port: {{ .Values.producer.service.port }}
+      targetPort: {{ .Values.producer.service.tartgetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- with .Values.producer.selectorLabels}}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}

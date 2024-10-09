@@ -1,0 +1,52 @@
+consumer:
+  name: consumer
+  labels:
+    app: consumer
+  replicaCount: 1
+  selectorLabels:
+    app: consumer
+  podLabels:
+    app: consumer
+  image:
+    repository: 315234377/consumer
+    pullPolicy: IfNotPresent
+    tag: latest
+  commandToExe:
+  - "python"
+  - "consumer.py"
+  - "-p"
+  - "5672"
+  - "-s"
+  - "rabbitmq"
+  service:
+    port: 5000
+    tartgetPort: 5000
+
+producer:
+  name: producer
+  labels:
+    app: producer
+  replicaCount: 1
+  selectorLabels:
+    app: producer
+  podLabels:
+    app: producer
+  image:
+    repository: 315234377/producer
+    pullPolicy: IfNotPresent
+    tag: latest
+  commandToExe:
+  - "python"
+  - "producer.py"
+  - "-p"
+  - "5672"
+  - "-s"
+  - "rabbitmq"
+  - "-m"
+  - "Hello"
+  - "-r"
+  - "30"
+  service:
+    port: 5001
+    tartgetPort: 5001
+
