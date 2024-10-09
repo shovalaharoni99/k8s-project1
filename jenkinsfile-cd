@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    environment {
+        KUBECONFIG = credentials('eks-project1-cred')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/shovalaharoni99/k8s-project1'
+            }
+        }
+        stage('Deploy Helm chart') {
+            steps {
+                sh "helm install project1 ./project1-helm"
+            }
+        }
+    }
+}
