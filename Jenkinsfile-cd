@@ -30,7 +30,7 @@ pipeline {
                     // Helm deployment to your EKS cluster
                     sh '''
                     echo "Running Helm commands..."
-                    helm install project1 ./project1-helm
+                    helm upgrade --install project1 ./project1-helm
                     '''
                 }
             }
