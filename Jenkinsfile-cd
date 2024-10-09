@@ -1,9 +1,20 @@
 pipeline {
     agent any
     environment {
-        KUBECONFIG = credentials('eks-project1-cred')
+        EKS_TOKEN = credentials('eks-project1-cred')
     }
-    stages {
+    stages{
+        stage('Configure Kubernetes Access') {
+                steps {
+                    script {
+                        sh '''
+                        kubectl config set-credentials eks-user --token=$EKS_TOKEN
+                
+                        '''
+                        
+                    }
+                }
+            }
         stage('Checkout') {
             steps {
                 git 'https://github.com/shovalaharoni99/k8s-project1'
