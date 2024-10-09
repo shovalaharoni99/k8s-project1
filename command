@@ -30,6 +30,7 @@ rabbitmqctl add_user guest guest
 rabbitmqctl set_permissions -p / guest ".*" ".*" ".*"
 
 
-aws eks get-token --region us-east-1 --cluster-name project1
+###rabbitmq-exporter
+helm install rabbitmq-exporter prometheus-community/prometheus-rabbitmq-exporter -f rabbitmq-exporter-values.yaml 
 
 

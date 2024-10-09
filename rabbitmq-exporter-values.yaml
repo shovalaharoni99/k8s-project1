@@ -1,0 +1,10 @@
+replicaCount: 1
+
+service:
+  type: LoadBalancer
+  port: 9419
+
+rabbitmq:
+  url: "http://rabbitmq:15672"
+  user: "guest"
+  password: "guest"

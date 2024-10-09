@@ -8,6 +8,11 @@ pipeline {
         CLUSTER_NAME = 'project1'  // Replace with your EKS cluster name
     }
     stages{
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/shovalaharoni99/k8s-project1'
+            }
+        }
         stage('Configure AWS and Kubernetes') {
             steps {
                 script {
@@ -17,11 +22,6 @@ pipeline {
                     aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${CLUSTER_NAME}
                     '''
                 }
-            }
-        }
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/shovalaharoni99/k8s-project1'
             }
         }
         stage('Deploy Using Helm') {
