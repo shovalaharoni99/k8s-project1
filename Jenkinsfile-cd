@@ -11,6 +11,7 @@ pipeline {
         }
         stage('Deploy Helm chart') {
             steps {
+                sh "get ns"
                 sh "helm install project1 ./project1-helm"
             }
         }
