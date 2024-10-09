@@ -1,29 +1,38 @@
 pipeline {
     agent any
     environment {
-        EKS_TOKEN = credentials('eks-project1-cred')
+       // Use AWS credentials from Jenkins credentials store
+        AWS_ACCESS_KEY_ID = credentials('aws-cred')  // Jenkins credentials ID for AWS
+        AWS_SECRET_ACCESS_KEY = credentials('aws-cred')
+        AWS_DEFAULT_REGION = 'us-east-1'  // Replace with your AWS region
+        CLUSTER_NAME = 'project1'  // Replace with your EKS cluster name
     }
     stages{
-        stage('Configure Kubernetes Access') {
-                steps {
-                    script {
-                        sh '''
-                        kubectl config set-credentials eks-user --token=$EKS_TOKEN
-                
-                        '''
-                        
-                    }
+        stage('Configure AWS and Kubernetes') {
+            steps {
+                script {
+                    // Use AWS CLI to update kubeconfig for connecting to the EKS cluster
+                    sh '''
+                    echo "Configuring kubeconfig for EKS..."
+                    aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${CLUSTER_NAME}
+                    '''
                 }
             }
+        }
         stage('Checkout') {
             steps {
                 git 'https://github.com/shovalaharoni99/k8s-project1'
             }
         }
-        stage('Deploy Helm chart') {
+        stage('Deploy Using Helm') {
             steps {
-                sh "get ns"
-                sh "helm install project1 ./project1-helm"
+                script {
+                    // Helm deployment to your EKS cluster
+                    sh '''
+                    echo "Running Helm commands..."
+                    helm install project1 ./project1-helm
+                    '''
+                }
             }
         }
     }
